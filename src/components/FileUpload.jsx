@@ -9,6 +9,7 @@ export default function FileUpload({ onFilesSelected }) {
       (f) => f.name.endsWith('.xlsx') || f.name.endsWith('.xls')
     );
     if (files.length > 0) onFilesSelected(files);
+    if (inputRef.current) inputRef.current.value = '';
   };
 
   const handleDrop = (e) => {

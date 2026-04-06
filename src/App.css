@@ -383,6 +383,27 @@ html, body, #root {
   margin-top: 0.25rem;
 }
 
+.uploaded-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.85rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.82rem;
+}
+.uploaded-count {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.btn-clear {
+  color: #cf222e;
+  text-decoration: none;
+  font-weight: 500;
+}
+
 /* ── Scan Status ─────────────────────────────────────────────────────────── */
 .scan-result { margin-top: 1rem; }
 

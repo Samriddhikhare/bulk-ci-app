@@ -57,7 +57,7 @@ export default function App() {
     setCsvData(null);
     setPreviewRows([]);
 
-    const allParsed = [];
+    const newParsed = [];
     const newEntries = {};
 
     for (const file of files) {
@@ -65,7 +65,7 @@ export default function App() {
         const sheets = await parseExcelFile(file);
         for (const sheet of sheets) {
           const key = `${file.name}__${sheet.sheetName}`;
-          allParsed.push({ ...sheet, fileName: file.name, key });
+          newParsed.push({ ...sheet, fileName: file.name, key });
           newEntries[key] = defaultEntry();
         }
       } catch {
@@ -73,8 +73,18 @@ export default function App() {
       }
     }
 
-    setParsedFiles(allParsed);
-    setEntries(newEntries);
+    setParsedFiles((prev) => {
+      const existingKeys = new Set(prev.map((p) => p.key));
+      const unique = newParsed.filter((p) => !existingKeys.has(p.key));
+      return [...prev, ...unique];
+    });
+    setEntries((prev) => {
+      const merged = { ...prev };
+      for (const [k, v] of Object.entries(newEntries)) {
+        if (!merged[k]) merged[k] = v;
+      }
+      return merged;
+    });
     setLoading(false);
   }, []);
 
@@ -166,6 +176,17 @@ export default function App() {
           <span className="step-badge">Step 1</span>
           <h2 className="step-title">Upload MOP Excel Files</h2>
           <FileUpload onFilesSelected={handleFilesSelected} />
+          {parsedFiles.length > 0 && (
+            <div className="uploaded-bar">
+              <span className="uploaded-count">{fileNames.length} file(s) uploaded — drop more to add</span>
+              <button
+                className="btn-text btn-clear"
+                onClick={() => { setParsedFiles([]); setEntries({}); setCsvData(null); setPreviewRows([]); }}
+              >
+                Clear All
+              </button>
+            </div>
+          )}
         </div>
 
         {loading && <Loader text="Scanning files for IP addresses..." />}
