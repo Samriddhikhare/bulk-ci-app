@@ -512,6 +512,24 @@ html, body, #root {
 
 .downtime-fields { margin-top: 0.5rem; }
 
+/* ── Include Toggle & Excluded Card ──────────────────────────────────────── */
+.include-toggle {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.sheet-card.excluded {
+  border-color: var(--border);
+}
+
+.sheet-card-body.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+  user-select: none;
+}
+
 /* ── Summary Bar ─────────────────────────────────────────────────────────── */
 .summary-bar {
   background: var(--bg-summary);

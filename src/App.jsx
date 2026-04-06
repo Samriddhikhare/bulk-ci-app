@@ -22,6 +22,7 @@ function formatDT(dateStr, timeStr) {
 
 function defaultEntry() {
   return {
+    included: true,
     spoc: '',
     hasDowntime: false,
     downtimeStartDate: todayStr(),
@@ -86,7 +87,12 @@ export default function App() {
   const activityStart = formatDT(config.actStartDate, config.actStartTime);
   const activityEnd = formatDT(config.actEndDate, config.actEndTime);
 
-  const allEntries = parsedFiles.map((pf) => {
+  const includedFiles = parsedFiles.filter((pf) => {
+    const e = entries[pf.key] || defaultEntry();
+    return e.included;
+  });
+
+  const allEntries = includedFiles.map((pf) => {
     const e = entries[pf.key] || defaultEntry();
     return {
       ips: pf.ips,
@@ -102,7 +108,7 @@ export default function App() {
 
   const totalIps = allEntries.reduce((sum, e) => sum + e.ips.length, 0);
   const allSpocsSet = allEntries.every((e) => e.spoc.trim() !== '');
-  const canGenerate = config.bcrNumber && parsedFiles.length > 0 && allSpocsSet && totalIps > 0;
+  const canGenerate = config.bcrNumber && includedFiles.length > 0 && allSpocsSet && totalIps > 0;
 
   const handleGenerate = () => {
     const csv = generateCSV(allEntries, activityStart, activityEnd);
